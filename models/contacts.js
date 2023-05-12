@@ -2,7 +2,7 @@ const fs = require("fs/promises");
 const path = require("path");
 const { v4 } = require("uuid");
 
-const contactsPath = path.join(__dirname, "./db/contacts.json");
+const contactsPath = path.join(__dirname, "./contacts.json");
 
 const listContacts = async () => {
   const data = await fs.readFile(contactsPath);
@@ -45,9 +45,21 @@ const addContact = async (name, email, phone) => {
   return newContact;
 };
 
+const updateContact = async (id, body) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex((contact) => contact.id === id);
+  if (index === -1) {
+    return null;
+  }
+  contacts[index] = { id, ...body };
+  await updateContacs(contacts);
+  return contacts[index];
+};
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
+  updateContact,
 };
