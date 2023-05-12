@@ -32,14 +32,9 @@ const removeContact = async (contactId) => {
   return removeContact;
 };
 
-const addContact = async (name, email, phone) => {
+const addContact = async (data) => {
   const contacts = await listContacts();
-  const newContact = {
-    name,
-    email,
-    phone,
-    id: v4(),
-  };
+  const newContact = { ...data, id: v4() };
   contacts.push(newContact);
   await updateContacs(contacts);
   return newContact;

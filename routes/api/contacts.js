@@ -4,18 +4,17 @@ const ctrl = require("../../controllers/contacts");
 
 const { validateBody } = require("../../middlewars");
 
-const schemas = require("../../schemas/contacts");
+const contactsSchema = require("../../schemas");
 
 const router = express.Router();
 
-router.get("/", ctrl.listContacts);
+router
+  .route("/")
+  .get(ctrl.listContacts)
+  .post(validateBody(contactsSchema), ctrl.addContact);
 
-router.get("/:contactId", ctrl.getContactById);
+router.route("/:contactId").get(ctrl.getContactById).delete(ctrl.removeContact);
 
-router.post("/", validateBody(schemas.addSchema), ctrl.addContact);
-
-router.delete("/:contactId", ctrl.removeContact);
-
-router.put("/:id", validateBody(schemas.addSchema), ctrl.updateContact);
+router.put("/:id", validateBody(contactsSchema), ctrl.updateContact);
 
 module.exports = router;
